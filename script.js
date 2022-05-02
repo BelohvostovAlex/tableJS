@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return users;
   };
 
-  const createTable = async (thNames = ["id", "name", "phone", "website"]) => {
+  const createTable = async (
+    thNames = ["check", "id", "name", "phone", "website"]
+  ) => {
     const table = document.createElement("table");
     table.style.cssText = `
         width: 1200px;
@@ -51,24 +53,44 @@ document.addEventListener("DOMContentLoaded", () => {
       let td2 = document.createElement("td");
       let td3 = document.createElement("td");
       let td4 = document.createElement("td");
-      td1.textContent = user.id;
-      td2.textContent = user.name;
-      td3.textContent = user.phone;
-      td4.textContent = user.email;
+      let td5 = document.createElement("td");
+      td1.innerHTML = '<input type="checkbox"/>';
+      td2.textContent = user.id;
+      td3.textContent = user.name;
+      td4.textContent = user.phone;
+      td5.textContent = user.email;
       tr.append(td1);
       tr.append(td2);
       tr.append(td3);
       tr.append(td4);
+      tr.append(td5);
       tbody.append(tr);
     }
     document.body.append(table);
 
-    let allTd = document.querySelectorAll('td')
-    for(let i = 0; i < allTd.length; i++) {
-        allTd[i].style.cssText = `
-        padding: 10px`
+    let allTd = document.querySelectorAll("td");
+    for (let i = 0; i < allTd.length; i++) {
+      allTd[i].style.cssText = `
+        padding: 10px`;
     }
   };
 
+  const createBtn = () => {
+    const button = document.createElement("button");
+    button.innerText = "delete";
+    document.body.append(button);
+
+    button.addEventListener("click", () => {
+      const allCheckboxes = document.querySelectorAll("input");
+      allCheckboxes.forEach((el) => {
+        if (el.checked) {
+          el.closest("tr").remove();
+        } else {
+          console.log("cant be deleted");
+        }
+      });
+    });
+  };
   createTable();
+  createBtn();
 });
