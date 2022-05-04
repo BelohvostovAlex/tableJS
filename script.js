@@ -21,19 +21,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const createEl = (el, text, styles) => {
-    const tag = document.createElement(el);
-    tag.textContent = text;
-    tag.style.cssText = styles;
+  const createEl = (obj) => {
+    const tag = document.createElement(obj.el);
+    tag.textContent = obj.text;
+    tag.style.cssText = obj.styles;
     return tag;
   };
 
+
   const createTable = async (tableCaption, thNames, fetchedData) => {
-    try {
-      const table = createEl(
-        "table",
-        null,
-        `
+      const table = createEl({
+        el: "table",
+        styles: `
         width: 1200px;
         background: gray;
         padding: 20px;
@@ -41,67 +40,55 @@ document.addEventListener("DOMContentLoaded", () => {
         text-align: center;
         border: 2px solid black;
         `
+      }
       );
 
-      const caption = createEl(
-        "caption",
-        tableCaption,
-        `
+      const caption = createEl({
+        el: "caption",
+        text: tableCaption,
+        styles:`
         color: gray;
         font-size: 30px;
         padding: 10px 0px;
         `
-      );
-      const thead = createEl("thead");
-      const trHead = createEl("tr");
-      const tbody = createEl("tbody");
+      });
+      const thead = createEl({el: "thead"});
+      const trHead = createEl({el: "tr"});
+      const tbody = createEl({el: "tbody"});
 
       table.append(caption);
       table.append(thead);
       table.append(tbody);
       thead.append(trHead);
 
-      thNames.forEach((element) => {
-        const th = createEl(
-          "th",
-          element,
-          `
+      thNames.forEach((title) => {
+        const th = createEl({
+          el:"th",
+          text: title,
+          styles:`
           font-size: 18px;
           text-transform: uppercase;
           padding: 10px 0px;
           `
-        );
+        });
         trHead.append(th);
       });
 
-      const data = await fetchedData;
+      const data = await fetchedData //!!!
 
       for (let item of data) {
-        const tr = createEl("tr");
-        const input = createEl("input");
-        input.type = "checkbox";
-        input.setAttribute("id", item.id);
-        const td = createEl("td");
-        td.append(input);
-        tr.append(td);
-        thNames.slice(1).forEach((thName) => {
-          const td = createEl("td", item[thName]);
+        const tr = createEl({el:"tr"});
+        thNames.forEach((thName) => {
+          const td = createEl({el:"td", text: item[thName], styles: `
+          padding: 10px;
+          `});
           tr.append(td);
         });
         tbody.append(tr);
       }
       document.body.prepend(table);
 
-      const allTd = document.querySelectorAll("td");
-      for (let i = 0; i < allTd.length; i++) {
-        allTd[i].style.cssText = `
-        padding: 10px;
-        `;
-      }
-    } catch (error) {
-      console.log(error.message);
     }
-  };
 
   const createBtn = () => {
     const button = createEl(
@@ -126,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   createTable(
     "Table #1 (Users data)",
-    ["check", "id", "name", "phone", "website"],
+    ["id", "name", "phone", "website"],
     getData("https://jsonplaceholder.typicode.com/users")
   );
   createBtn();
