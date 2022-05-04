@@ -78,7 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let item of data) {
         const tr = createEl({el:"tr"});
-        thNames.forEach((thName) => {
+        const td = createEl({el:"td", styles : `padding:`})
+        const input = createEl({el: "input"})
+        input.type = "checkbox"
+        input.setAttribute("id", item.id)
+        td.append(input)
+        tr.append(td)
+        thNames.slice(1).forEach((thName) => {
           const td = createEl({el:"td", text: item[thName], styles: `
           padding: 10px;
           `});
@@ -91,11 +97,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
   const createBtn = () => {
-    const button = createEl(
-      "button",
-      "delete",
-      `width: 60px; height: 30px; margin: 20px auto; display: block; background: gray; border: none; color: white;`
-    );
+    const button = createEl({
+      el:"button",
+      text:"delete",
+      styles:`width: 60px; height: 30px; margin: 20px auto; display: block; background: gray; border: none; color: white;`
+    });
     document.body.append(button);
 
     button.addEventListener("click", () => {
@@ -113,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   createTable(
     "Table #1 (Users data)",
-    ["id", "name", "phone", "website"],
+    ["check", "id", "name", "phone", "website"],
     getData("https://jsonplaceholder.typicode.com/users")
   );
   createBtn();
