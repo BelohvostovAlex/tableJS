@@ -12,37 +12,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const deleteItem = async (url, id) => {
     try {
       const response = await fetch(`${url}/${id}`, {
-        method: 'DELETE'
-      })
-      const json = await response.json()
-      return json
+        method: "DELETE",
+      });
+      const json = await response.json();
+      return json;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-   const createEl = (el, text, styles) => {
+  const createEl = (el, text, styles) => {
     const tag = document.createElement(el);
     tag.textContent = text;
     tag.style.cssText = styles;
     return tag;
-  };
-
-  const createBtn = () => {
-    const button = createEl("button", 'delete', `width: 60px; height: 30px; margin: 20px auto; display: block; background: gray; border: none; color: white;`);
-    document.body.append(button);
-
-    button.addEventListener("click", () => {
-      const allCheckboxes = document.querySelectorAll("input");
-
-      allCheckboxes.forEach((el) => {
-        if (el.checked) {
-          let id = el.getAttribute("id");
-          deleteItem('https://jsonplaceholder.typicode.com/users', id)
-          el.closest('tr').remove()
-        }
-      });
-    });
   };
 
   const createTable = async (tableCaption, thNames, fetchedData) => {
@@ -95,12 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let item of data) {
         const tr = createEl("tr");
-        const input = createEl('input')
-        input.type = 'checkbox'
-        input.setAttribute("id", item.id)
-        const td = createEl('td')
-        td.append(input)
-        tr.append(td)
+        const input = createEl("input");
+        input.type = "checkbox";
+        input.setAttribute("id", item.id);
+        const td = createEl("td");
+        td.append(input);
+        tr.append(td);
         thNames.slice(1).forEach((thName) => {
           const td = createEl("td", item[thName]);
           tr.append(td);
@@ -120,9 +103,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-    createTable(
+  const createBtn = () => {
+    const button = createEl(
+      "button",
+      "delete",
+      `width: 60px; height: 30px; margin: 20px auto; display: block; background: gray; border: none; color: white;`
+    );
+    document.body.append(button);
+
+    button.addEventListener("click", () => {
+      const allCheckboxes = document.querySelectorAll("input");
+
+      allCheckboxes.forEach((el) => {
+        if (el.checked) {
+          let id = el.getAttribute("id");
+          deleteItem("https://jsonplaceholder.typicode.com/users", id);
+          el.closest("tr").remove();
+        }
+      });
+    });
+  };
+
+  createTable(
     "Table #1 (Users data)",
-    ["check","id", "name", "phone", "website"],
+    ["check", "id", "name", "phone", "website"],
     getData("https://jsonplaceholder.typicode.com/users")
   );
   createBtn();
