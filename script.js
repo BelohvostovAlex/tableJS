@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let item of data) {
         const tr = createEl({el:"tr"});
-        const td = createEl({el:"td", styles : `padding:`})
+        const td = createEl({el:"td", styles : `padding: 10px;`})
         const input = createEl({el: "input"})
         input.type = "checkbox"
         input.setAttribute("id", item.id)
