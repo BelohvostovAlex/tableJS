@@ -1,74 +1,93 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const getData = async () => {
-    const response = await fetch("https://jsonplaceholder.typicode.com/users");
-    const users = await response.json();
-    return users;
+  const getData = async (url) => {
+    try {
+      const response = await fetch(url);
+      const users = await response.json();
+      return users;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const createTable = async (thNames = ["id", "name", "phone", "website"]) => {
-    const table = document.createElement("table");
-    table.style.cssText = `
+  const createEl = (el, text, styles) => {
+    const tag = document.createElement(el);
+    tag.textContent = text;
+    tag.style.cssText = styles;
+    return tag;
+  };
+
+  const createTable = async (tableCaption, thNames, fetchedData) => {
+    try {
+      const table = createEl(
+        "table",
+        null,
+        `
         width: 1200px;
         background: gray;
         padding: 20px;
         margin: 0 auto;
         text-align: center;
         border: 2px solid black;
-    `;
-    const caption = document.createElement("caption");
-    const thead = document.createElement("thead");
-    const trHead = document.createElement("tr");
-    const tbody = document.createElement("tbody");
+        `
+      );
 
-    caption.textContent = "Table #1 (Users data)";
-    caption.style.cssText = `
-            color: gray;
-            font-size: 30px;
-            padding: 10px 0px
-        `;
+      const caption = createEl(
+        "caption",
+        tableCaption,
+        `
+        color: gray;
+        font-size: 30px;
+        padding: 10px 0px;
+        `
+      );
+      const thead = createEl("thead");
+      const trHead = createEl("tr");
+      const tbody = createEl("tbody");
 
-    table.append(caption);
-    table.append(thead);
-    table.append(tbody);
-    thead.append(trHead);
+      table.append(caption);
+      table.append(thead);
+      table.append(tbody);
+      thead.append(trHead);
 
-    for (let i = 0; i < thNames.length; i++) {
-      const th = document.createElement("th");
-      th.style.cssText = `
-                font-size: 18px;
-                text-transform: uppercase;
-                padding: 10px 0px;
-            `;
-      th.textContent = thNames[i];
-      trHead.append(th);
-    }
+      thNames.forEach((element) => {
+        const th = createEl(
+          "th",
+          element,
+          `
+          font-size: 18px;
+          text-transform: uppercase;
+          padding: 10px 0px;
+          `
+        );
+        trHead.append(th);
+      });
 
-    let users = await getData();
+      const data = await fetchedData;
 
-    for (let user of users) {
-      let tr = document.createElement("tr");
-      let td1 = document.createElement("td");
-      let td2 = document.createElement("td");
-      let td3 = document.createElement("td");
-      let td4 = document.createElement("td");
-      td1.textContent = user.id;
-      td2.textContent = user.name;
-      td3.textContent = user.phone;
-      td4.textContent = user.email;
-      tr.append(td1);
-      tr.append(td2);
-      tr.append(td3);
-      tr.append(td4);
-      tbody.append(tr);
-    }
-    document.body.append(table);
+      for (let item of data) {
+        const tr = createEl("tr");
+        thNames.forEach((thName) => {
+          const td = createEl("td", item[thName]);
+          tr.append(td);
+        });
+        tbody.append(tr);
+      }
+      document.body.append(table);
 
-    let allTd = document.querySelectorAll('td')
-    for(let i = 0; i < allTd.length; i++) {
+      const allTd = document.querySelectorAll("td");
+      for (let i = 0; i < allTd.length; i++) {
         allTd[i].style.cssText = `
-        padding: 10px`
+        padding: 10px;
+        `;
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
-  createTable();
+  createTable(
+    "Table #1 (Users data)",
+    ["id", "name", "phone", "website"],
+    getData("https://jsonplaceholder.typicode.com/users")
+  );
 });
