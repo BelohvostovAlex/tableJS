@@ -104,15 +104,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const unique = (str, isUnique) => {
     const arr = str.split("");
-    const obj = {};
+    const objUniq = {};
     for (let i = 0; i < arr.length; i++) {
-      if (obj[arr[i]]) {
-        obj[arr[i]] += 1;
+      if (objUniq[arr[i]]) {
+        objUniq[arr[i]] += 1;
       } else {
-        obj[arr[i]] = 1;
+        objUniq[arr[i]] = 1;
       }
     }
-    const uniqueLetters = Object.values(obj).filter((item) => item < 2).length;
+    const uniqueLetters = Object.values(objUniq).filter(
+      (item) => item < 2
+    ).length;
     const moreThanOnce = arr.length - uniqueLetters;
     if (isUnique) {
       return uniqueLetters;
@@ -121,13 +123,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const createUniqTd = (name, body, clbck, obj) => {
+  const createUniqTd = (name, body, clbck, item) => {
     if (name === "unique") {
       return clbck(body, true);
     } else if (name === "more than 1") {
       return clbck(body, false);
     } else {
-      return obj[name];
+      return item[name];
     }
   };
 });
