@@ -9,12 +9,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const deleteItem = async (config) => {
+    try {
+      const { url, id } = config;
+      const response = await fetch(`${url}/${id}`, {
+        method: "DELETE",
+      });
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createEl = (config) => {
     const { el, text, styles } = config;
     const tag = document.createElement(el);
     tag.textContent = text;
     tag.style.cssText = styles;
     return tag;
+  };
+
+  const createCheckbox = (config) => {
+    const { el, type, attribute, attributeVal } = config;
+    const input = createEl({ el });
+    input.type = type;
+    input.setAttribute(attribute, attributeVal);
+    return input;
   };
 
   const createTable = (tableCaption, thNames, fetchedData) => {
@@ -63,7 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let item of fetchedData) {
       const tr = createEl({ el: "tr" });
-      thNames.forEach((thName) => {
+      const td = createEl({ el: "td", styles: `padding: 10px;` });
+      const input = createCheckbox({
+        el: "input",
+        type: "checkbox",
+        attribute: "id",
+        attributeVal: item.id,
+      });
+      td.append(input);
+      tr.append(td);
+      thNames.slice(1).forEach((thName) => {
         const td = createEl({
           el: "td",
           text: item[thName],
@@ -75,18 +105,41 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       tbody.append(tr);
     }
-    document.body.append(table);
+    document.body.prepend(table);
+  };
+
+  const createBtn = () => {
+    const button = createEl({
+      el: "button",
+      text: "delete",
+      styles: `width: 60px; height: 30px; margin: 20px auto; display: block; background: gray; border: none; color: white;`,
+    });
+    document.body.append(button);
+
+    button.addEventListener("click", deleteRow);
+  };
+
+  const deleteRow = () => {
+    const allCheckboxes = document.querySelectorAll("input");
+    allCheckboxes.forEach((el) => {
+      if (el.checked) {
+        const id = el.getAttribute("id");
+        deleteItem({ url: "https://jsonplaceholder.typicode.com/users", id });
+        el.closest("tr").remove();
+      }
+    });
   };
 
   getData("https://jsonplaceholder.typicode.com/users")
     .then((data) =>
       createTable(
         "Table #1 (Users data)",
-        ["id", "name", "phone", "website"],
+        ["check", "id", "name", "phone", "website"],
         data
       )
     )
     .catch((err) => {
       throw new Error(err.message);
     });
+  createBtn();
 });
