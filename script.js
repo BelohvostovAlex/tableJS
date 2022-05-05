@@ -107,16 +107,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     document.body.append(button);
 
-    button.addEventListener("click", () => {
-      const allCheckboxes = document.querySelectorAll("input");
+    button.addEventListener("click", deleteRow);
+  };
 
-      allCheckboxes.forEach((el) => {
-        if (el.checked) {
-          const id = el.getAttribute("id");
-          deleteItem({ url: "https://jsonplaceholder.typicode.com/users", id });
-          el.closest("tr").remove();
-        }
-      });
+  const deleteRow = () => {
+    const allCheckboxes = document.querySelectorAll("input");
+    allCheckboxes.forEach((el) => {
+      if (el.checked) {
+        const id = el.getAttribute("id");
+        deleteItem({ url: "https://jsonplaceholder.typicode.com/users", id });
+        el.closest("tr").remove();
+      }
     });
   };
 
