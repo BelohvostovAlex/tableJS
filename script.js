@@ -30,6 +30,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return tag;
   };
 
+  const createCheckbox = (config) => {
+    const { el, type, attribute, attributeVal } = config;
+    const input = createEl({ el });
+    input.type = type;
+    input.setAttribute(attribute, attributeVal);
+    return input;
+  };
+
   const createTable = (tableCaption, thNames, fetchedData) => {
     const table = createEl({
       el: "table",
@@ -77,9 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let item of fetchedData) {
       const tr = createEl({ el: "tr" });
       const td = createEl({ el: "td", styles: `padding: 10px;` });
-      const input = createEl({ el: "input" });
-      input.type = "checkbox";
-      input.setAttribute("id", item.id);
+      const input = createCheckbox({
+        el: "input",
+        type: "checkbox",
+        attribute: "id",
+        attributeVal: item.id,
+      });
       td.append(input);
       tr.append(td);
       thNames.slice(1).forEach((thName) => {
