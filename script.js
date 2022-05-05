@@ -103,8 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   const unique = (str, isUnique) => {
-    let arr = str.split("");
-    let obj = {};
+    const arr = str.split("");
+    const obj = {};
     for (let i = 0; i < arr.length; i++) {
       if (obj[arr[i]]) {
         obj[arr[i]] += 1;
