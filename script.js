@@ -10,9 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const createEl = (config) => {
-    const tag = document.createElement(config.el);
-    tag.textContent = config.text;
-    tag.style.cssText = config.styles;
+    const { el, text, styles } = config;
+    const tag = document.createElement(el);
+    tag.textContent = text;
+    tag.style.cssText = styles;
     return tag;
   };
 
