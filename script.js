@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const users = await response.json();
       return users;
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   };
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return tag;
   };
 
-  const createTable = async (tableCaption, thNames, fetchedData) => {
+  const createTable = (tableCaption, thNames, fetchedData) => {
     const table = createEl({
       el: "table",
       styles: `
@@ -74,9 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       trHead.append(th);
     });
 
-    const data = await fetchedData; //!!!
-
-    for (let item of data) {
+    for (let item of fetchedData) {
       const tr = createEl({ el: "tr" });
       const td = createEl({ el: "td", styles: `padding: 10px;` });
       const input = createEl({ el: "input" });
@@ -121,10 +119,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  createTable(
-    "Table #1 (Users data)",
-    ["check", "id", "name", "phone", "website"],
-    getData("https://jsonplaceholder.typicode.com/users")
-  );
+  getData("https://jsonplaceholder.typicode.com/users")
+    .then((data) =>
+      createTable(
+        "Table #1 (Users data)",
+        ["check", "id", "name", "phone", "website"],
+        data
+      )
+    )
+    .catch((err) => {
+      throw new Error(err.message);
+    });
   createBtn();
 });
