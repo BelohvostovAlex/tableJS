@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       thNames.forEach((thName) => {
         const td = createEl({
           el: "td",
-          text: item[thName],
+          text: createUniqTd(thName, item.body, unique, item),
           styles: `
           padding: 10px;
           `,
@@ -89,4 +89,45 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((err) => {
       throw new Error(err.message);
     });
+
+  getData("https://jsonplaceholder.typicode.com/posts?_limit=10")
+    .then((data) =>
+      createTable(
+        "Table #2 (Posts data)",
+        ["id", "title", "body", "unique", "more than 1"],
+        data
+      )
+    )
+    .catch((err) => {
+      throw new Error(err.message);
+    });
+
+  const unique = (str, isUnique) => {
+    let arr = str.split("");
+    let obj = {};
+    for (let i = 0; i < arr.length; i++) {
+      if (obj[arr[i]]) {
+        obj[arr[i]] += 1;
+      } else {
+        obj[arr[i]] = 1;
+      }
+    }
+    const uniqueLetters = Object.values(obj).filter((item) => item < 2).length;
+    const moreThanOnce = arr.length - uniqueLetters;
+    if (isUnique) {
+      return uniqueLetters;
+    } else {
+      return moreThanOnce;
+    }
+  };
+
+  const createUniqTd = (name, body, clbck, obj) => {
+    if (name === "unique") {
+      return clbck(body, true);
+    } else if (name === "more than 1") {
+      return clbck(body, false);
+    } else {
+      return obj[name];
+    }
+  };
 });
