@@ -66,7 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
       thNames.forEach((thName) => {
         const td = createEl({
           el: "td",
-          text: createUniqTd(thName, item.body, unique, item),
+          text: createUniqTd(
+            new TdDto({ name: thName, body: item.body, cb: unique, item })
+          ),
           styles: `
           padding: 10px;
           `,
@@ -103,7 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   const unique = (str, isUnique) => {
-    const arr = str.split("");
+    const arr = str.split("").filter((item) => item !== " " && item !== "\n");
+    console.log(arr);
     const objUniq = {};
     for (let i = 0; i < arr.length; i++) {
       if (objUniq[arr[i]]) {
@@ -112,24 +115,40 @@ document.addEventListener("DOMContentLoaded", () => {
         objUniq[arr[i]] = 1;
       }
     }
-    const uniqueLetters = Object.values(objUniq).filter(
-      (item) => item < 2
-    ).length;
-    const moreThanOnce = arr.length - uniqueLetters;
+    const uniqArr = Object.values(objUniq);
+    console.log(objUniq);
+    const uniqueLetters = uniqArr.filter((item) => item < 2).length;
+    const moreThanOnce = uniqArr.filter((item) => item > 1).length;
+
     if (isUnique) {
       return uniqueLetters;
-    } else {
-      return moreThanOnce;
+    }
+    return moreThanOnce;
+  };
+
+  const createUniqTd = (dto) => {
+    const { name, body, cb, item } = dto;
+    switch (name) {
+      case "unique":
+        return cb(body, true);
+      case "more than 1":
+        return cb(body, false);
+      default:
+        return item[name];
     }
   };
 
-  const createUniqTd = (name, body, clbck, item) => {
-    if (name === "unique") {
-      return clbck(body, true);
-    } else if (name === "more than 1") {
-      return clbck(body, false);
-    } else {
-      return item[name];
+  class TdDto {
+    name;
+    body;
+    cb;
+    item;
+
+    constructor(model) {
+      this.name = model.name;
+      this.body = model.body;
+      this.cb = model.cb;
+      this.item = model.item;
     }
-  };
+  }
 });
