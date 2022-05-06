@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       tbody.append(tr);
     }
-    document.body.append(table);
+    document.body.prepend(table);
   };
 
   getData("https://jsonplaceholder.typicode.com/users")
@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const unique = (str, isUnique) => {
     const arr = str.split("").filter((item) => item !== " " && item !== "\n");
-    console.log(arr);
     const objUniq = {};
     for (let i = 0; i < arr.length; i++) {
       if (objUniq[arr[i]]) {
@@ -116,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     const uniqArr = Object.values(objUniq);
-    console.log(objUniq);
     const uniqueLetters = uniqArr.filter((item) => item < 2).length;
     const moreThanOnce = uniqArr.filter((item) => item > 1).length;
 
