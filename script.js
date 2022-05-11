@@ -223,9 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((res) => {
       res.createTableWithDel();
+      res.createBtn("https://jsonplaceholder.typicode.com/users");
       return res;
-    })
-    .then((res) => res.createBtn("https://jsonplaceholder.typicode.com/users"));
+    });
 
   class TableWithUnique extends Table {
     constructor(tableArgs) {
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.fetchedData.forEach((item) => {
         const tr = this.createEl({ el: "tr" });
         this.thNames.forEach((thName) => {
-          const TdDto = {
+          const tdDto = {
             name: thName,
             body: item.body,
             cb: this.unique,
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const td = this.createEl({
             el: "td",
-            text: this.createUniqTd(TdDto),
+            text: this.createUniqTd(tdDto),
             styles: `
                   padding: 10px;
                   `,
