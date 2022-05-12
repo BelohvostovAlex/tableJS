@@ -211,21 +211,17 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  getData("https://jsonplaceholder.typicode.com/users")
-    .then((data) => {
-      const table = new TableWithDeleting({
-        tableCaption: "Table #1 (Users data)",
-        id: "table1",
-        thNames: ["check", "name", "phone", "website"],
-        fetchedData: data,
-      });
-      return table;
-    })
-    .then((res) => {
-      res.createTableWithDel();
-      res.createBtn("https://jsonplaceholder.typicode.com/users");
-      return res;
+  getData("https://jsonplaceholder.typicode.com/users").then((data) => {
+    const table = new TableWithDeleting({
+      tableCaption: "Table #1 (Users data)",
+      id: "table1",
+      thNames: ["check", "name", "phone", "website"],
+      fetchedData: data,
     });
+    table.createTableWithDel();
+    table.createBtn("https://jsonplaceholder.typicode.com/users");
+    return table;
+  });
 
   class TableWithUnique extends Table {
     constructor(tableArgs) {
@@ -334,18 +330,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  getData("https://jsonplaceholder.typicode.com/posts?_limit=10")
-    .then((data) => {
+  getData("https://jsonplaceholder.typicode.com/posts?_limit=10").then(
+    (data) => {
       const table = new TableWithUnique({
         tableCaption: "Table #2 (Posts data)",
         id: "table2",
         thNames: ["id", "title", "body", "unique", "more than 1"],
         fetchedData: data,
       });
+      table.createTableWithUniq();
       return table;
-    })
-    .then((res) => {
-      res.createTableWithUniq();
-      return res;
-    });
+    }
+  );
 });
